@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"wayslink/database"
-	"wayslink/pkg/mysql"
-	"wayslink/routes"
-
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"net/http"
+	"os"
+	"wayslink/database"
+	"wayslink/pkg/mysql"
+	"wayslink/routes"
 )
 
 func main() {
@@ -33,6 +33,7 @@ func main() {
 
 	r.PathPrefix("/uploads").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads"))))
 
-	fmt.Println("server running localhost:5000")
-	http.ListenAndServe("localhost:5000", handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
+	var port = os.Getenv("PORT")
+	fmt.Println("server running localhost:" + port)
+	http.ListenAndServe(":"+port, handlers.CORS(AllowedHeaders, AllowedMethods, AllowedOrigins)(r))
 }
